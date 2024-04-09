@@ -1,4 +1,4 @@
-// AzamCode workflows
+# AzamCode workflows
 name: Run on workflows
 on:
     schedule:
@@ -48,9 +48,6 @@ jobs:
              sudo apt -qq update && sudo apt-get install python3-pip ffmpeg
              pip3 install -U -r requirements.txt
              pip3 install -U pip
-            
-
-
 
 # -----------------------------------------------------------
        - name: Running
