@@ -1,0 +1,62 @@
+// AzamCode workflows
+name: Run on workflows
+on:
+    schedule:
+      - cron: "0 */6 * * *"
+    push:
+      branches: [ beta ]
+    workflow_dispatch:
+    
+env:
+  API_ID: "${{ secrets.API_ID }}"
+  API_HASH: "${{ secrets.API_HASH }}"
+  BOT_TOKEN: "${{ secrets.BOT_TOKEN }}"
+  SESSION_STRING: "${{ secrets.SESSION_STRING }}"
+  ASSISTANT_NAME: "${{ secrets.ASSISTANT_NAME }}"
+  SUPPORT_GROUP: "${{ secrets.SUPPORT_GROUP }}"
+  UPDATES_CHANNEL: "${{ secrets.UPDATES_CHANNEL }}"
+  SUDO_USERS: "${{ secrets.SUDO_USERS }}"
+  REPLY_MESSAGE: "${{ secrets.REPLY_MESSAGE }}"
+
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+       - uses: actions/checkout@v2
+         with:
+            ref: beta
+       - uses: styfle/cancel-workflow-action@0.9.0
+         name: "Cancelling duplicate workflow runs"
+         with:
+            all_but_latest: true
+            access_token: ${{ github.token }}
+       - uses: actions/setup-node@v2
+         with:
+            node-version: '16'
+       - name: Set up Python 3.9
+         uses: actions/setup-python@v2.2.2
+         with:
+           python-version: 3.9
+       - name: cloning repo and install
+
+         continue-on-error: true
+         run: |
+           # sudo apt -qq update && sudo apt -qq install -y --no-install-recommends ffmpeg neofetch
+             sudo apt -qq update && sudo apt-get install python3-pip ffmpeg
+             pip3 install -U -r requirements.txt
+             pip3 install -U pip
+            
+
+
+
+# -----------------------------------------------------------
+       - name: Running
+         timeout-minutes: 350
+         continue-on-error: true
+         run: |
+           # python3 -m vcbot
+              python3 main.py
+           echo "Bot Died"
